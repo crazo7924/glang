@@ -1,0 +1,107 @@
+glang by Bharat Dev Burman
+
+Spec version: 0.1.0
+
+Last edited on: Monday 22 May 2023 04:20:01 PM
+_________________________________
+
+// an example single line comment
+/*
+    an example
+    multiline comment
+*/
+
+Note: newlines are delimiters. fallback is semicolon ';'
+
+[types]
+
+    (u)int, (u)float, bool, char (UTF-8), string (array of chars)
+    
+    (add 'u' prefix for unsigned variants)
+
+    struct
+        for compound variables like in C
+
+        struct <name> { /* primitives, self or other structs */ }
+        
+
+    array
+        for contagious memory storage of values having the same type
+
+[operators]
+
+  arithematic
+    + add ints and floats, concat strings and chars to strings.
+    - subtract ints and floats. also for representing negative (signed) ints and floats
+    * multiply ints and floats
+    / divide ints and floats
+   ** power (ultimate) 
+
+  logical (the usual)
+    > , < , <= , => , != , == , && , ||
+
+  bitwise (the usual)
+    ~ NOT
+    | OR
+    & AND
+    ^ XOR
+   ~& NAND
+   ~| NOR
+
+[statements]
+
+  declaration
+    <type> <name>
+
+  assignment
+    <name> = <value>
+    <name1> = <name2>
+
+  conditional
+
+    'if' prefix for checking what follows it
+    <name1> <logical> <name2>
+    <name> == <type>
+    <name> != <type>
+
+  control
+
+    switch(<name>) { 
+ // {
+       <value>: <statement>
+       // fall-through is present.
+       // To prevent it, use 'break' keyword.
+       default: <statement> // no match
+    }
+
+  looping
+
+    while(<condition>) { ... }
+
+    for(<name> = <initial_value>; <condition>; <statement>) { ... }
+
+    for(<iter_name> : <array>) { ... } 
+
+
+  computational
+    <name0> = <name1> <arithematic> <name2>
+    <name0> = <name1> <bitwise> <name2>
+
+    <name1> <arithematic>= <name2> (short hand self-assignment)
+    <name1> <bitwise>= <name2> (short hand self-assignment)
+
+[functions]
+
+    <return_type> <function_name> ([zero or more args...]) {
+
+        // comments
+        <statement>
+        (more <statement>s)
+
+        // omit the return keyword if no value but can use anyway for an early finish
+        return <return_value>
+    }
+
+    <name> = <function_name> (args...)
+    
+    
