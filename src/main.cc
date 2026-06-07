@@ -1,5 +1,5 @@
-#include "ast.hpp"
-#include "codegen.hpp"
+#include "ast.hh"
+#include "codegen.hh"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -11,6 +11,11 @@
 #include <llvm/IR/LegacyPassManager.h>
 #include <llvm/Target/TargetMachine.h>
 #include <llvm/Target/TargetOptions.h>
+#if LLVM_VERSION_MAJOR >= 17
+#  include <llvm/TargetParser/Triple.h>
+#else
+#  include <llvm/ADT/Triple.h>
+#endif
 #include <llvm/MC/TargetRegistry.h>
 #include <llvm/ExecutionEngine/ExecutionEngine.h>
 #include <llvm/ExecutionEngine/MCJIT.h>
@@ -67,7 +72,7 @@ int main(int argc, char** argv) {
     llvm::InitializeNativeTargetAsmPrinter();
     llvm::InitializeNativeTargetAsmParser();
 
-    auto TargetTriple = llvm::sys::getDefaultTargetTriple();
+    auto TargetTriple = llvm::Triple(llvm::sys::getDefaultTargetTriple());
     ctx.module->setTargetTriple(TargetTriple);
 
     std::string Error;

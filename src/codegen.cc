@@ -1,6 +1,6 @@
-#include "codegen.hpp"
-#include "ast.hpp"
-#include "parser.hpp" // For token definitions (T_PLUS etc.)
+#include "codegen.hh"
+#include "ast.hh"
+#include "parser.hh" // For token definitions (T_PLUS etc.)
 #include <iostream>
 
 using namespace llvm;
