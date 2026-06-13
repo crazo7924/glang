@@ -113,7 +113,7 @@ make test
 *   `src/main.cc`: Main entry point of the compiler.
 *   `Makefile`: Build script for the project.
 *   `test.g`: A sample `glang` program for testing.
-*   `glang_v0.1.0_spec.txt`: The language specification.
+*   `glang_v*_spec.txt`: The language specification.
 
 ## Contributing
 
