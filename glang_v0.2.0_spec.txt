@@ -1,8 +1,8 @@
 glang by Bharat Dev Burman
 
-Spec version: 0.1.0
+Spec version: 0.2.0
 
-Last edited on: Monday 22 May 2023 04:20:01 PM
+Last edited on: Saturday 13 June 2026
 _________________________________
 
 // an example single line comment
@@ -16,14 +16,19 @@ Note: newlines are delimiters. fallback is semicolon ';'
 [types]
 
     (u)int, (u)float, bool, char (UTF-8), string (array of chars)
-    
-    (add 'u' prefix for unsigned variants)
+
+    (add 'u' prefix for unsigned variants of numbers)
+
+    Note on strings: String literals are enclosed in double quotes (e.g., "hello world").
+    Escape sequences like \n (newline), \t (tab), \r (carriage return), \" (double quote),
+    \\ (backslash), and \0 (null character) are supported. Unknown escape sequences
+    will be treated as a literal backslash followed by the character, with a warning.
 
     struct
         for compound variables like in C
 
         struct <name> { /* primitives, self or other structs */ }
-        
+
 
     array
         for contagious memory storage of values having the same type
@@ -35,7 +40,7 @@ Note: newlines are delimiters. fallback is semicolon ';'
     - subtract ints and floats. also for representing negative (signed) ints and floats
     * multiply ints and floats
     / divide ints and floats
-   ** power (ultimate) 
+   ** power (ultimate)
 
   logical (the usual)
     > , < , <= , => , != , == , && , ||
@@ -66,7 +71,7 @@ Note: newlines are delimiters. fallback is semicolon ';'
 
   control
 
-    switch(<name>) { 
+    switch(<name>) {
  // {
        <value>: <statement>
        // fall-through is present.
@@ -80,7 +85,7 @@ Note: newlines are delimiters. fallback is semicolon ';'
 
     for(<name> = <initial_value>; <condition>; <statement>) { ... }
 
-    for(<iter_name> : <array>) { ... } 
+    for(<iter_name> : <array>) { ... }
 
 
   computational
@@ -103,5 +108,3 @@ Note: newlines are delimiters. fallback is semicolon ';'
     }
 
     <name> = <function_name> (args...)
-    
-    
