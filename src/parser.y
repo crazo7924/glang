@@ -23,7 +23,7 @@ extern std::unique_ptr<ProgramNode> programBlock;
     std::vector<std::pair<std::string, std::string>> *arg_vec;
 }
 
-%token <string> T_IDENTIFIER T_INTEGER T_FLOAT
+%token <string> T_IDENTIFIER T_INTEGER T_FLOAT T_STRING
 %token T_TYPE_INT T_TYPE_FLOAT T_IF T_ELSE T_WHILE T_RETURN T_DELIMITER
 %token T_ASSIGN T_EQ T_NEQ T_LT T_LTE T_GT T_GTE T_PLUS T_MINUS T_MUL T_DIV
 %token T_LPAREN T_RPAREN T_LBRACE T_RBRACE T_COMMA
@@ -143,6 +143,7 @@ expr:
       T_IDENTIFIER { $$ = new IdentifierNode(*$1); delete $1; }
     | T_INTEGER { $$ = new IntNode(std::stoll(*$1)); delete $1; }
     | T_FLOAT { $$ = new FloatNode(std::stod(*$1)); delete $1; }
+    | T_STRING { $$ = new StringNode(*$1); delete $1; }
     | expr T_PLUS expr { $$ = new BinaryOpNode(std::unique_ptr<ExprNode>($1), T_PLUS, std::unique_ptr<ExprNode>($3)); }
     | expr T_MINUS expr { $$ = new BinaryOpNode(std::unique_ptr<ExprNode>($1), T_MINUS, std::unique_ptr<ExprNode>($3)); }
     | expr T_MUL expr { $$ = new BinaryOpNode(std::unique_ptr<ExprNode>($1), T_MUL, std::unique_ptr<ExprNode>($3)); }

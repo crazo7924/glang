@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <iostream>
 
 class CodeGenContext;
 namespace llvm {
@@ -36,6 +37,50 @@ class FloatNode : public ExprNode {
 public:
     double value;
     FloatNode(double value) : value(value) {}
+    virtual llvm::Value* codegen(CodeGenContext& context) override;
+};
+
+class StringNode : public ExprNode {
+private:
+    std::string sanitizeString(const std::string& raw) {
+        if (raw.length() < 2 || raw.front() != '"' || raw.back() != '"') {
+            return raw;
+        }
+        std::string result;
+        result.reserve(raw.length() - 2);
+        for (size_t i = 1; i < raw.length() - 1; ++i) {
+            if (raw[i] == '\\') {
+                if (i + 1 >= raw.length() - 1) {
+                    std::cerr << "Warning: Escape character '\\' at end of string literal." << std::endl;
+                    result += '\\';
+                    break;
+                }
+                char next = raw[++i];
+                switch (next) {
+                    case 'n': result += '\n'; break;
+                    case 't': result += '\t'; break;
+                    case 'r': result += '\r'; break;
+                    case '\\': result += '\\'; break;
+                    case '"': result += '"'; break;
+                    case '\'': result += '\''; break;
+                    case '0': result += '\0'; break;
+                    default:
+                        std::cerr << "Warning: Unknown escape sequence '\\" << next << "'." << std::endl;
+                        result += '\\';
+                        result += next;
+                        break;
+                }
+            } else {
+                result += raw[i];
+            }
+        }
+        return result;
+    }
+public:
+    std::string value;
+    StringNode(const std::string& raw_value) {
+        value = sanitizeString(raw_value);
+    }
     virtual llvm::Value* codegen(CodeGenContext& context) override;
 };
 

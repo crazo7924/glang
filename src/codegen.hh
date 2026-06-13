@@ -10,7 +10,6 @@
 #include <llvm/IR/Verifier.h>
 #include <memory>
 #include <map>
-#include <vector>
 #include <string>
 
 class CodeGenContext {

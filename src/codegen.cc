@@ -24,7 +24,7 @@ void CodeGenContext::setupBuiltins() {
     BasicBlock* printIntBB = BasicBlock::Create(*context, "entry", printIntFunc);
     IRBuilder<> builder(printIntBB);
 
-    Value* formatStr = builder.CreateGlobalStringPtr("%lld\n");
+    Value* formatStr = builder.CreateGlobalString("%lld\n");
     builder.CreateCall(printfFunc, {formatStr, printIntFunc->getArg(0)});
     builder.CreateRetVoid();
 
@@ -34,9 +34,19 @@ void CodeGenContext::setupBuiltins() {
     BasicBlock* printFloatBB = BasicBlock::Create(*context, "entry", printFloatFunc);
     IRBuilder<> builderF(printFloatBB);
 
-    Value* formatStrF = builderF.CreateGlobalStringPtr("%f\n");
+    Value* formatStrF = builderF.CreateGlobalString("%f\n");
     builderF.CreateCall(printfFunc, {formatStrF, printFloatFunc->getArg(0)});
     builderF.CreateRetVoid();
+
+    // print_string(string)
+    FunctionType* printStringType = FunctionType::get(Type::getVoidTy(*context), {llvm::PointerType::getUnqual(*context)}, false);
+    Function* printStringFunc = Function::Create(printStringType, Function::ExternalLinkage, "print_string", module.get());
+    BasicBlock* printStringBB = BasicBlock::Create(*context, "entry", printStringFunc);
+    IRBuilder<> builderS(printStringBB);
+
+    Value* formatStrS = builderS.CreateGlobalString("%s\n");
+    builderS.CreateCall(printfFunc, {formatStrS, printStringFunc->getArg(0)});
+    builderS.CreateRetVoid();
 
     // read_int() -> int
     FunctionType* readIntType = FunctionType::get(Type::getInt64Ty(*context), false);
@@ -44,7 +54,7 @@ void CodeGenContext::setupBuiltins() {
     BasicBlock* readIntBB = BasicBlock::Create(*context, "entry", readIntFunc);
     IRBuilder<> readBuilder(readIntBB);
 
-    Value* readFormatStr = readBuilder.CreateGlobalStringPtr("%lld");
+    Value* readFormatStr = readBuilder.CreateGlobalString("%lld");
     AllocaInst* valAlloc = readBuilder.CreateAlloca(Type::getInt64Ty(*context));
     readBuilder.CreateCall(scanfFunc, {readFormatStr, valAlloc});
     Value* loadedVal = readBuilder.CreateLoad(Type::getInt64Ty(*context), valAlloc);
@@ -64,6 +74,10 @@ Value* IntNode::codegen(CodeGenContext& ctx) {
 
 Value* FloatNode::codegen(CodeGenContext& ctx) {
     return ConstantFP::get(*ctx.context, APFloat(value));
+}
+
+Value* StringNode::codegen(CodeGenContext& ctx) {
+    return ctx.builder->CreateGlobalString(value, "str");
 }
 
 Value* IdentifierNode::codegen(CodeGenContext& ctx) {
@@ -124,9 +138,10 @@ Value* CallNode::codegen(CodeGenContext& ctx) {
 
     // Quick overload for print
     if (funcName == "print" && args.size() == 1) {
-        // If we want a quick hack for print
         if (argsV[0] && argsV[0]->getType()->isDoubleTy()) {
             funcName = "print_float";
+        } else if (argsV[0] && argsV[0]->getType()->isPointerTy()) {
+            funcName = "print_string";
         }
     }
 

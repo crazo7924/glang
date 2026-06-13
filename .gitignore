@@ -1,6 +1,7 @@
-glangc
+glang
 src/*.o
 src/lexer.cc
 src/lexer.hh
 src/parser.cc
 src/parser.hh
+*.o

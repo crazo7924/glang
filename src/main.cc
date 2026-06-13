@@ -1,7 +1,5 @@
 #include "ast.hh"
 #include "codegen.hh"
-#include <iostream>
-#include <fstream>
 #include <string>
 
 #include <llvm/Support/TargetSelect.h>
@@ -138,7 +136,8 @@ int main(int argc, char** argv) {
     ee->finalizeObject();
     std::vector<llvm::GenericValue> noargs;
     llvm::GenericValue v = ee->runFunction(mainFunc, noargs);
-    llvm::outs() << "Program exited with code: " << v.IntVal.getSExtValue() << "\n";
+    auto returnValue = v.IntVal.getSExtValue();
+    llvm::outs() << "Program exited with code: " << returnValue << "\n";
 
     return 0;
 }

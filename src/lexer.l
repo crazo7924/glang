@@ -30,7 +30,7 @@
 [a-zA-Z_][a-zA-Z0-9_]*    SAVE_TOKEN; return T_IDENTIFIER;
 [0-9]+\.[0-9]*            SAVE_TOKEN; return T_FLOAT;
 [0-9]+                    SAVE_TOKEN; return T_INTEGER;
-
+\"[^\"\n]*\"              { SAVE_TOKEN; return T_STRING; }
 "="                       return T_ASSIGN;
 "=="                      return T_EQ;
 "!="                      return T_NEQ;
